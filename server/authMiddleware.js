@@ -1,17 +1,34 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
+const publicKey = process.env.USERFRONT_PUBLIC_KEY
+
+console.log("Formatted Public Key:", publicKey);
+
+
 const authenticateToken = (req, res, next) => {
-    // Get the auth header value
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN_STRING
+    const token = authHeader && authHeader.split(' ')[1];  // Bearer <token>
 
     if (token == null) return res.sendStatus(401); // No token, unauthorized
 
-    jwt.verify(token, process.env.USERFRONT_PUBLIC_KEY, { algorithms: ["RS256"] }, (err, user) => {
-        if (err) return res.sendStatus(403); // Invalid token
+    jwt.verify(token, publicKey, { algorithms: ["RS256"] }, (err, decoded) => {
 
-        req.auth = user; // Assign the decoded user to request object
+        if (err) {
+            console.log('JWT Error:', err.message);
+            return res.status(403).json({ error: "Invalid token", details: err.message });
+        }
+    
+        console.log(decoded);
+
+        // Attach user information to the request
+        req.user = {
+            userId: decoded.userId,
+            userUuid: decoded.userUuid,
+            tenantId: decoded.tenantId,
+            roles: decoded.authorization && decoded.authorization[decoded.tenantId] ? decoded.authorization[decoded.tenantId].roles : []
+        };
+        
         next(); // Proceed to the next middleware or route handler
     });
 }

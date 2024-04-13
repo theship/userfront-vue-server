@@ -1,18 +1,26 @@
 const express = require('express');
-const app = express();
+const cors = require('cors');
 const authenticateToken = require('./authMiddleware');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Configure CORS
+app.use(cors({
+    origin: 'http://localhost:5173',  // This should match the URL and port of your Vue app
+    optionsSuccessStatus: 200  // Some legacy browsers choke on status 204
+}));
 
 app.use(express.json());
 
-app.get('/protected-route', authenticateToken, (req, res) => {
-    const tenantId = 'demo1234'; // Assuming you know the tenant ID you want to check roles for
-    if (req.auth && req.auth.authorization && req.auth.authorization[tenantId] && req.auth.authorization[tenantId].roles.includes("admin")) {
-        console.log("User is an admin");
+app.get('/admin-endpoint', authenticateToken, (req, res) => {
+    if (req.user.roles.includes("admin")) {
+        res.json({ isAdmin: true, message: "You are an admin!" });
     } else {
-        console.log("User is not an admin");
+        res.status(403).json({ isAdmin: false, message: "Access denied. Not an admin." });
     }
-    res.send("This is a protected route");
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
