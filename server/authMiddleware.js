@@ -3,9 +3,6 @@ const jwt = require('jsonwebtoken');
 
 const publicKey = process.env.USERFRONT_PUBLIC_KEY
 
-console.log("Formatted Public Key:", publicKey);
-
-
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];  // Bearer <token>
