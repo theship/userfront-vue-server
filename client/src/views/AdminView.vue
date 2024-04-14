@@ -28,7 +28,7 @@ async function fetchAdminDetails() {
             throw new Error(`Failed to fetch admin details: ${response.statusText}`);
         }
         
-        // To safely parse and log the response, first check the content type
+        // Parse and log the response
         if (contentType && contentType.includes('application/json')) {
             const data = await response.json();
             console.log('Response Data:', data);  // Log the JSON data
@@ -48,10 +48,10 @@ onMounted(fetchAdminDetails);
 
 
 <template>
-    <div class="admin-panel">
+    <div class="admin-panel" v-if="adminDetails">
         <h1>Admin Panel</h1>
         <p>Welcome to the admin panel.</p>
-        <div v-if="adminDetails">
+        <div>
             <h2>Admin Details</h2>
             <p>Your Org Tenant ID: {{ adminDetails.tenantId }}</p>
             <p v-if="adminDetails.roles">Your Roles: {{ adminDetails.roles.join(', ') }}</p>
