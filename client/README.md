@@ -1,6 +1,6 @@
 # userfront-vue
 
-This template should help get you started developing with Vue 3 in Vite.
+This code base is an example of the client side Vue+Node+Express with Userfront.
 
 ## Recommended IDE Setup
 
@@ -20,6 +20,7 @@ npm install
 
 ```sh
 npm install vuex@next --save
+npm install @userfront/toolkit --save
 ```
 
 ### Compile and Hot-Reload for Development
