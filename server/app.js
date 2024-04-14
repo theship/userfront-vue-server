@@ -14,10 +14,20 @@ app.use(cors({
 app.use(express.json());
 
 app.get('/admin-endpoint', authenticateToken, (req, res) => {
+    // Check if the user has 'admin' role
     if (req.user.roles.includes("admin")) {
-        res.json({ isAdmin: true, message: "You are an admin!" });
+        // Send back isAdmin status, tenantId, and roles
+        res.json({
+            isAdmin: true,
+            message: "You are an admin!",
+            tenantId: req.user.tenantId,  // Include tenantId
+            roles: req.user.roles          // Include roles array
+        });
     } else {
-        res.status(403).json({ isAdmin: false, message: "Access denied. Not an admin." });
+        res.status(403).json({
+            isAdmin: false,
+            message: "Access denied. Not an admin.",
+        });
     }
 });
 

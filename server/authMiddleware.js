@@ -19,12 +19,18 @@ const authenticateToken = (req, res, next) => {
         console.log(decoded);
 
         // Attach user information to the request
+        const tenantId = decoded.tenantId;
+        const roles = decoded.authorization && decoded.authorization[tenantId] ? decoded.authorization[tenantId].roles : [];
+
+        // Attach user information to the request
         req.user = {
             userId: decoded.userId,
             userUuid: decoded.userUuid,
-            tenantId: decoded.tenantId,
-            roles: decoded.authorization && decoded.authorization[decoded.tenantId] ? decoded.authorization[decoded.tenantId].roles : []
+            tenantId: tenantId,
+            roles: roles
         };
+
+        console.log(req.user);
         
         next(); // Proceed to the next middleware or route handler
     });
