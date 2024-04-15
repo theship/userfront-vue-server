@@ -16,16 +16,22 @@ From main project file:
 
 > npm install express dotenv jsonwebtoken cors
 
-## Install Userfront on the client side
-
-If you haven't already done so, in the `client` directory, install Userfront.
-
-> npm install @userfront/toolkit --save
-
 ## Create a server app and middleware
 
 * Create a [server/app.js](server/app.js) file and include the code.
 * Create a [server/authMiddleware.js](server/authMiddleware.js) file and include the code.
+
+## Install the Userfront public key
+
+```
+USERFRONT_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+MIICIj...
+.
+.
+.
+...AwEAAQ==
+-----END PUBLIC KEY-----"
+```
 
 ## In the client
 

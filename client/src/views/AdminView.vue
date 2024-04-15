@@ -6,8 +6,14 @@ const store = useStore();
 const adminDetails = ref({});
 
 async function fetchAdminDetails() {
+    // Retrieve the access token from a proper source
+    const accessToken = Userfront.tokens.accessToken;
+
+    // Dispatch the action with the  access token
+    await store.dispatch('fetchAdminStatus', accessToken);
+
     if (!store.state.isAdmin) {
-        console.error("Access denied. Not an admin.");
+        console.error("Access denied. No access.");
         return;
     }
 
@@ -25,7 +31,7 @@ async function fetchAdminDetails() {
         console.log('Response Content-Type:', contentType);
 
         if (!response.ok) {
-            throw new Error(`Failed to fetch admin details: ${response.statusText}`);
+            throw new Error(`Failed to fetch access details: ${response.statusText}`);
         }
         
         // Parse and log the response
@@ -38,7 +44,7 @@ async function fetchAdminDetails() {
             console.log('Response received is not JSON:', await response.text());  // Log non-JSON response for debugging
         }
     } catch (error) {
-        console.error("Error fetching admin details:", error);
+        console.error("Error fetching access details:", error);
     }
 }
 
