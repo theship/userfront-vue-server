@@ -23,16 +23,6 @@ From main project file:
 
 ## Install the Userfront public key
 
-```
-USERFRONT_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
-MIICIj...
-.
-.
-.
-...AwEAAQ==
------END PUBLIC KEY-----"
-```
-
 ## In the client
 
 Update the client side code as discussed in that [README.md](../client/README.md) file.
